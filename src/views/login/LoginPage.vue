@@ -80,8 +80,7 @@ const login = async () => {
     （4）el-form-item prop配置生效的事哪个校验规则 （和rules中的字段要对应）
 -->
   <el-row class="login-page">
-    <el-col :span="12" class="bg"></el-col>
-    <el-col :span="6" :offset="4" class="form">
+    <el-col :span="6" :offset="3" class="form">
       <!-- 登录相关表单 -->
       <el-form :model="formModel" :rules="rules" ref="form" size="large" autocomplete="off">
         <el-form-item>
@@ -125,6 +124,7 @@ const login = async () => {
         </el-form-item>
       </el-form>
     </el-col>
+    <el-col :span="12"></el-col>
   </el-row>
 </template>
 
