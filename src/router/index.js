@@ -14,8 +14,8 @@ const router = createRouter({
     { path: '/login', component: () => import('@/views/login/LoginPage.vue') }, // 登录页
     {
       path: '/',
-      component: () => import('@/views/article/chatRoom.vue'),
-      redirect: '/article/manage',
+      component: () => import('@/views/login/LoginPage.vue'),
+      redirect: '/login',
     },
   ],
 })

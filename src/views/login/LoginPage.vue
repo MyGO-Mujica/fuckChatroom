@@ -85,9 +85,15 @@ const login = async () => {
       <!-- 登录相关表单 -->
       <el-form :model="formModel" :rules="rules" ref="form" size="large" autocomplete="off">
         <el-form-item>
-          <div class="avatar-wrapper" @click="showAvatarDialog = true">
-            <img :src="formModel.avatar" class="selected-avatar" />
-            <span class="change-tip">点击更换头像</span>
+          <div class="form-header">
+            <!-- 新增这个父容器 -->
+            <div class="chatroom-title-wrapper">
+              <h1 class="chatroom-title">KeXie ChatRoom</h1>
+            </div>
+            <div class="avatar-wrapper" @click="showAvatarDialog = true">
+              <img :src="formModel.avatar" class="selected-avatar" />
+              <span class="change-tip">点击更换头像</span>
+            </div>
           </div>
         </el-form-item>
         <el-dialog v-model="showAvatarDialog" title="选择头像" width="400px" center>
@@ -146,13 +152,43 @@ const login = async () => {
     }
   }
 }
+.form-header {
+  display: flex;
+  align-items: center; // 垂直居中
+  justify-content: space-between; // 两端对齐
+  gap: 1px; // 元素间距
+  width: 100%;
+
+  .chatroom-title-wrapper {
+    flex: 1; // 标题部分占据剩余空间
+    text-align: left; // 标题左对齐
+  }
+
+  .chatroom-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #409eff;
+    margin: 0;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    position: relative;
+  }
+}
+.chatroom-title::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 0;
+  width: 75%;
+  height: 4px;
+  background: linear-gradient(to right, #409eff, #67c23a);
+  border-radius: 2px;
+}
 
 .avatar-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-left: 35%;
-  gap: 5px;
   cursor: pointer;
   .selected-avatar {
     width: 100px;
