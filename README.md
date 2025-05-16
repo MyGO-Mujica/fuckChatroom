@@ -1,2 +1,2 @@
-This is a smile chatroom.
+This is a simplechatroom.
 
