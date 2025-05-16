@@ -14,8 +14,14 @@ const router = createRouter({
     { path: '/login', component: () => import('@/views/login/LoginPage.vue') }, // 登录页
     {
       path: '/',
-      component: () => import('@/views/login/LoginPage.vue'),
-      redirect: '/login',
+      component: () => import('@/views/layout/LayoutContainer.vue'),
+      redirect: '/chat/chatRoom',
+      children: [
+        {
+          path: '/chat/chatRoom',
+          component: () => import('@/views/chat/chatRoom.vue'),
+        },
+      ],
     },
   ],
 })

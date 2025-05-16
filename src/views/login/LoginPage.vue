@@ -1,5 +1,6 @@
 <script setup>
-import { userLoginService } from '@/api/user'
+//import { userLoginService } from '@/api/user'
+// import {  userLoginService } from '@/api/user'
 import { User } from '@element-plus/icons-vue'
 import { ref } from 'vue'
 import { useUserStore } from '@/stores'
@@ -51,12 +52,31 @@ const formModel = ref({
   avatar: images.value[0],
 })
 console.log(formModel)
+// 模拟 userLoginService 的响应
+const mockUserLoginService = async (data) => {
+  // 模拟后端返回的数据
+  return {
+    data: {
+      username: data.username,
+      avatar: data.avatar,
+    },
+  }
+}
+
 const login = async () => {
-  await form.value.validate()
-  const res = await userLoginService(formModel.value)
-  userStore.setToken(res.data.token)
-  ElMessage.success('登录成功')
-  router.push('/')
+  try {
+    await form.value.validate()
+    // 打印普通对象，避免 Proxy
+    console.log('表单数据:', JSON.parse(JSON.stringify(formModel.value)))
+    const res = await mockUserLoginService(formModel.value)
+    console.log('模拟登录响应数据:', JSON.parse(JSON.stringify(res.data)))
+    userStore.setUser(res.data)
+    ElMessage.success('模拟登录成功')
+    router.push('/chat/chatRoom')
+  } catch (error) {
+    console.error('登录错误:', error)
+    ElMessage.error('登录失败，请检查输入')
+  }
 }
 </script>
 
@@ -85,7 +105,6 @@ const login = async () => {
       <el-form :model="formModel" :rules="rules" ref="form" size="large" autocomplete="off">
         <el-form-item>
           <div class="form-header">
-            <!-- 新增这个父容器 -->
             <div class="chatroom-title-wrapper">
               <h1 class="chatroom-title">KeXie ChatRoom</h1>
             </div>
