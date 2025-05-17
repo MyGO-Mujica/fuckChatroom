@@ -1,58 +1,57 @@
-<script>
-export default {
-  name: 'ChatComponent',
-  data() {
-    return {
-      message: '',
-      messages: []
-    }
-  },
-  mounted() {
-    // 滚动到底部
-    this.$nextTick(() => {
-      this.scrollToBottom();
-    });
-  },
-  methods: {
-    sendMessage() {
-      if (this.message.trim() === '') return;
+<script setup>
+import { ref, nextTick } from 'vue'
+import { useUserStore } from '@/stores'
 
-      // 添加自己发送的消息
-      const newMessage = {
-        text: this.message,
-        time: this.formatTime(new Date()),
-        type: 'sent'
-      };
-      this.messages.push(newMessage);
+const userStore = useUserStore()
 
-      // 清空输入框
-      this.message = '';
+// 数据
+const message = ref('')
+const messages = ref([])
 
-      // 滚动到底部
-      this.scrollToBottom();
-
-      // 模拟回复
-      setTimeout(() => {
-        const replyMessage = {
-          text: '我收到了你的消息："' + newMessage.text + '"',
-          time: this.formatTime(new Date()),
-          type: 'received'
-        };
-        this.messages.push(replyMessage);
-        this.scrollToBottom();
-      }, 1000);
-    },
-    scrollToBottom() {
-      const container = this.$refs.messagesContainer;
-      container.scrollTop = container.scrollHeight;
-    },
-    formatTime(date) {
-      const hours = date.getHours().toString().padStart(2, '0');
-      const minutes = date.getMinutes().toString().padStart(2, '0');
-      return `${hours}:${minutes}`;
-    }
+// 发送消息
+// sendMessage 函数定义
+function sendMessage() {
+  if (message.value.trim() === '') return
+  const newMessage = {
+    text: message.value,
+    time: formatTime(new Date()),
+    type: 'sent',
   }
+  messages.value.push(newMessage)
+  message.value = ''
+  scrollToBottom()
+  setTimeout(() => {
+    const replyMessage = {
+      text: `我收到了你的消息："${newMessage.text}"`,
+      time: formatTime(new Date()),
+      type: 'received',
+    }
+    messages.value.push(replyMessage)
+    scrollToBottom()
+  }, 1000)
 }
+// 滚动到底部
+const messagesContainer = ref(null)
+function scrollToBottom() {
+  nextTick(() => {
+    if (messagesContainer.value) {
+      messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight
+    }
+  })
+}
+
+// 格式化时间
+function formatTime(date) {
+  const hours = date.getHours().toString().padStart(2, '0')
+  const minutes = date.getMinutes().toString().padStart(2, '0')
+  return `${hours}:${minutes}`
+}
+
+// 初始化时滚动到底部并打印 avatar 路径
+nextTick(() => {
+  scrollToBottom()
+  console.log(userStore)
+})
 </script>
 
 <template>
@@ -61,70 +60,47 @@ export default {
     <div class="chat-header">
       <div class="user-info">
         <div>
-          <h3 class="user-name">kexie聊天室</h3>
-          <p class="user-status">在线人数：</p>
+          <h3 class="user-name">Kexie聊天室</h3>
         </div>
-      </div>
-      <div class="chat-actions">
-        <button class="action-btn"><i class="fa fa-phone"></i></button>
-        <button class="action-btn"><i class="fa fa-video"></i></button>
-        <button class="action-btn"><i class="fa fa-ellipsis-v"></i></button>
       </div>
     </div>
 
     <!-- 聊天内容区域 -->
     <div class="chat-messages" ref="messagesContainer">
-
       <!-- 消息列表 -->
       <div class="message-list">
-        <!-- 系统消息 -->
-        <div class="system-message">
-          <span>今天 10:30</span>
-        </div>
-
-        <!-- 对方消息 -->
-        <div class="message received">
-          <img src="" alt="对方头像" class="avatar-left">
+        <!-- 动态渲染消息 -->
+        <!-- 动态渲染消息 -->
+        <div v-for="(msg, index) in messages" :key="index" :class="['message', msg.type]">
+          <img
+            v-if="msg.type === 'received'"
+            src="https://api.dicebear.com/7.x/bottts/svg?seed=a2"
+            alt="对方头像"
+            class="avatar-left"
+          />
           <div class="message-content">
             <div class="message-bubble">
-              <p>你好！今天过得怎么样？</p>
+              <p>{{ msg.text }}</p>
             </div>
-            <span class="message-time">10:30</span>
+            <span class="message-time">{{ msg.time }}</span>
           </div>
+          <img
+            v-if="msg.type === 'sent'"
+            :src="userStore.user.avatar"
+            alt="我的头像"
+            class="avatar-right"
+          />
         </div>
-
         <!-- 自己消息 -->
-        <div class="message sent">
-          <div class="message-content">
-            <div class="message-bubble">
-              <p>我过得很好，谢谢！你呢？</p>
-            </div>
-            <span class="message-time">10:32</span>
-          </div>
-          <img src="" alt="我的头像" class="avatar-right">
-        </div>
-
-        <!-- 对方消息 -->
-        <div class="message received">
-          <img src="" alt="对方头像" class="avatar-left">
-          <div class="message-content">
-            <div class="message-bubble">
-              <p>我也很好，最近在学习，感觉还不错。</p>
-            </div>
-            <span class="message-time">10:35</span>
-          </div>
-        </div>
-
-        <!-- 自己消息 -->
-        <div class="message sent">
+        <!-- <div class="message sent">
           <div class="message-content">
             <div class="message-bubble">
               <p>有什么问题可以一起讨论。</p>
             </div>
             <span class="message-time">10:37</span>
           </div>
-          <img src="" alt="我的头像" class="avatar-right">
-        </div>
+          <img :src="userStore.user.avatar" alt="我的头像" class="avatar-right" />
+        </div> -->
       </div>
     </div>
 
@@ -136,7 +112,7 @@ export default {
         <button class="action-btn"><i class="fa fa-microphone"></i></button>
       </div>
       <div class="input-wrapper">
-        <input type="text" placeholder="输入消息..." v-model="message" @keyup.enter="sendMessage">
+        <input type="text" placeholder="输入消息..." v-model="message" @keyup.enter="sendMessage" />
       </div>
       <button class="send-btn" @click="sendMessage">
         <i class="fa fa-paper-plane"></i>
@@ -158,38 +134,42 @@ export default {
 
 .chat-header {
   display: flex;
+  justify-content: space-between; /* 两端对齐，确保 chat-actions 在右侧 */
   align-items: center;
-  justify-content: space-between;
-  padding: 16px 20px;
-  background-color: #f8f9fa;
-  border-bottom: 1px solid #e9ecef;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
 }
 
 .user-info {
   display: flex;
   align-items: center;
+  justify-content: center;
+  flex-grow: 1; /* 占据剩余空间 */
 }
 
 .avatar-left {
-  width: 40px;
-  height: 40px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
   margin-right: 12px;
   object-fit: cover;
 }
 .avatar-right {
-  width: 40px;
-  height: 40px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
-  margin-right: 12px;
+  margin-left: 12px;
   object-fit: cover;
 }
 
 .user-name {
-  font-size: 16px;
-  font-weight: 600;
-  color: #333;
+  font-family: 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', system-ui, sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  color: #112fd8;
   margin: 0;
+  letter-spacing: 0.5px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .user-status {
@@ -232,11 +212,6 @@ export default {
 .message-list {
   display: flex;
   flex-direction: column;
-}
-
-.system-message {
-  text-align: center;
-  margin: 12px 0;
 }
 
 .system-message span {
