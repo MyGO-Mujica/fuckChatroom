@@ -102,7 +102,14 @@ const login = async () => {
   <el-row class="login-page">
     <el-col :span="6" :offset="3" class="form">
       <!-- 登录相关表单 -->
-      <el-form :model="formModel" :rules="rules" ref="form" size="large" autocomplete="off">
+      <el-form
+        :model="formModel"
+        :rules="rules"
+        ref="form"
+        size="large"
+        autocomplete="off"
+        @submit.prevent="login"
+      >
         <el-form-item>
           <div class="form-header">
             <div class="chatroom-title-wrapper">
@@ -139,7 +146,9 @@ const login = async () => {
           ></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button @click="login" class="button" type="primary" auto-insert-space>登录</el-button>
+          <el-button class="button" type="primary" auto-insert-space native-type="submit"
+            >登录</el-button
+          >
         </el-form-item>
       </el-form>
     </el-col>
