@@ -15,7 +15,7 @@ const router = createRouter({
     {
       path: '/',
       component: () => import('@/views/layout/LayoutContainer.vue'),
-      redirect: '/chat/chatRoom',
+      redirect: '/login',
       children: [
         {
           path: '/chat/chatRoom',
