@@ -16,13 +16,16 @@
     "@element-plus/icons-vue": "^2.3.1",
     "axios": "^1.9.0",
     "element-plus": "^2.9.9",
+    "emoji-picker-element": "^1.26.3",
     "pinia": "^3.0.1",
+    "pnpm": "^10.11.0",
+    "remove": "^0.1.5",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",
-    "@vitejs/plugin-vue": "^5.2.3",
+    "@vitejs/plugin-vue": "^1.26.3",
     "@vue/eslint-config-prettier": "^10.2.0",
     "eslint": "^9.22.0",
     "eslint-plugin-prettier": "^5.2.6",
