@@ -5,7 +5,7 @@ import { User } from '@element-plus/icons-vue'
 import { ref } from 'vue'
 import { useUserStore } from '@/stores'
 import { useRouter } from 'vue-router'
-
+const isRegister = ref(false)
 const form = ref()
 
 // 整个表单的校验规则
@@ -23,6 +23,10 @@ const rules = {
   username: [
     { required: true, message: '请输入用户名', trigger: 'blur' },
     { min: 5, max: 10, message: '用户名必须是 5-10位 的字符', trigger: 'blur' },
+  ],
+  password: [
+    { required: true, message: '请输入密码', trigger: 'blur' },
+    { pattern: /^\S{6,15}$/, message: '密码必须是 6-15 位的非空字符', trigger: 'blur' },
   ],
 }
 
@@ -49,6 +53,7 @@ const images = ref([
 
 const formModel = ref({
   username: '',
+  password: '',
   avatar: images.value[0],
 })
 console.log(formModel)
@@ -58,8 +63,23 @@ const mockUserLoginService = async (data) => {
   return {
     data: {
       username: data.username,
+      password: data.password,
       avatar: data.avatar,
     },
+  }
+}
+const register = async () => {
+  try {
+    await form.value.validate()
+    // 打印普通对象，避免 Proxy
+    console.log('表单数据:', JSON.parse(JSON.stringify(formModel.value)))
+    const res = await mockUserLoginService(formModel.value)
+    console.log('模拟登录响应数据:', JSON.parse(JSON.stringify(res.data)))
+    userStore.setUser(res.data)
+    ElMessage.success('模拟登录成功')
+  } catch (error) {
+    console.error('登录错误:', error)
+    ElMessage.error('登录失败，请检查输入')
   }
 }
 
@@ -101,19 +121,18 @@ const login = async () => {
 -->
   <el-row class="login-page">
     <el-col :span="6" :offset="3" class="form">
-      <!-- 登录相关表单 -->
       <el-form
         :model="formModel"
         :rules="rules"
         ref="form"
         size="large"
         autocomplete="off"
-        @submit.prevent="login"
+        v-if="isRegister"
       >
         <el-form-item>
           <div class="form-header">
             <div class="chatroom-title-wrapper">
-              <h1 class="chatroom-title">KeXie ChatRoom</h1>
+              <h1 class="chatroom-title">KeXie Register</h1>
             </div>
             <div class="avatar-wrapper" @click="showAvatarDialog = true">
               <img :src="formModel.avatar" class="selected-avatar" />
@@ -145,10 +164,81 @@ const login = async () => {
             placeholder="请输入用户名"
           ></el-input>
         </el-form-item>
+        <el-form-item prop="password">
+          <el-input
+            v-model="formModel.password"
+            :prefix-icon="Lock"
+            type="password"
+            placeholder="请输入密码"
+          ></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button @click="register" class="button" type="primary" auto-insert-space>
+            注册
+          </el-button>
+        </el-form-item>
+        <el-form-item class="flex">
+          <el-link type="info" :underline="false" @click="isRegister = false"> ← 返回 </el-link>
+        </el-form-item>
+      </el-form>
+      <!-- 登录相关表单 -->
+      <el-form
+        :model="formModel"
+        :rules="rules"
+        ref="form"
+        size="large"
+        autocomplete="off"
+        @submit.prevent="login"
+        v-else
+      >
+        <el-form-item>
+          <div class="form-header">
+            <div class="chatroom-title-wrapper">
+              <h1 class="chatroom-title">KeXie ChatRoom</h1>
+            </div>
+          </div>
+        </el-form-item>
+        <el-dialog v-model="showAvatarDialog" title="选择头像" width="400px" center>
+          <div class="avatar-list">
+            <img
+              v-for="(img, index) in images"
+              :key="index"
+              :src="img"
+              class="avatar"
+              @click="
+                () => {
+                  formModel.avatar = img
+                  showAvatarDialog = false
+                }
+              "
+            />
+          </div>
+        </el-dialog>
+
+        <el-form-item prop="username">
+          <el-input
+            v-model="formModel.username"
+            :prefix-icon="User"
+            placeholder="请输入用户名"
+          ></el-input>
+        </el-form-item>
+        <el-form-item prop="password">
+          <el-input
+            v-model="formModel.password"
+            name="password"
+            :prefix-icon="Lock"
+            type="password"
+            placeholder="请输入密码"
+          ></el-input>
+        </el-form-item>
+
         <el-form-item>
           <el-button class="button" type="primary" auto-insert-space native-type="submit"
             >登录</el-button
           >
+        </el-form-item>
+        <el-form-item class="flex">
+          <el-link type="info" :underline="false" @click="isRegister = true"> 注册 → </el-link>
         </el-form-item>
       </el-form>
     </el-col>
@@ -190,10 +280,11 @@ const login = async () => {
   .chatroom-title-wrapper {
     flex: 1; // 标题部分占据剩余空间
     text-align: left; // 标题左对齐
+    max-width: 250px;
   }
 
   .chatroom-title {
-    font-size: 32px;
+    font-size: 34px;
     font-weight: 700;
     color: #409eff;
     margin: 0;
