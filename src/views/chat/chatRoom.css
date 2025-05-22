@@ -1,5 +1,13 @@
+
+
+.chat-messages {
+  background-color: #F8F5FC;
+
+}
 .chat-container {
   display: flex;
+  /* float: left;
+  width: 70%; */
   flex-direction: column;
   height: 100%;
   border-radius: 12px;
@@ -9,6 +17,7 @@
 }
 
 .chat-header {
+  background-color: #D0B9E9;
   display: flex;
   justify-content: space-between; /* 两端对齐，确保 chat-actions 在右侧 */
   align-items: center;
@@ -35,7 +44,6 @@
   height: 50px;
   border-radius: 50%;
   margin-left: 5px;
-
   object-fit: cover;
 }
 
@@ -43,7 +51,7 @@
   font-family: 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', system-ui, sans-serif;
   font-size: 18px;
   font-weight: 800;
-  color: #112fd8;
+  color: #7050da;
   margin: 0;
   letter-spacing: 0.5px;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
@@ -164,15 +172,19 @@
 }
 
 .received .message-bubble {
-  background-color: #e9ecef;
-  color: #333;
+  background-color: #feebee;
+  color: #333333;
+  border: 1px solid #FFC0CB;
   border-top-left-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
 }
 
 .sent .message-bubble {
-  background-color: #007bff;
-  color: #fff;
+  background-color: #E3D8FF;
+  color: #5E4B9F;
+  border: 1px solid #D4C2FF;
   border-top-right-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .message-time {
@@ -212,7 +224,7 @@
 }
 
 .input-wrapper input:focus {
-  border-color: #007bff;
+  border-color: #D0B9E9;
 }
 
 .emoji-btn {
@@ -244,7 +256,7 @@
   border-radius: 8px;
 }
 .send-btn {
-  background-color: #007bff;
+  background-color: #D0B9E9;
   color: #fff;
   border: none;
   padding: 0 16px;
@@ -261,7 +273,7 @@
 }
 
 .send-btn:hover {
-  background-color: #0069d9;
+  background-color: #b98de8;
 }
 
 .send-content {
@@ -276,3 +288,36 @@
   position: relative;
   top: 1px;
 }
+
+/* 滚动条整体样式 */
+::-webkit-scrollbar {
+width: 10px; /* 纵向滚动条宽度 */
+height: 10px; /* 横向滚动条高度 */
+}
+
+/* 滚动条轨道 */
+::-webkit-scrollbar-track {
+background: rgba(159, 115, 193, 0);
+border-radius: 2em;
+}
+
+/* 滚动条滑块 */
+::-webkit-scrollbar-thumb {
+background-color: rgba(205, 171, 246, 0.5);
+border-radius: 2em;
+transition: background-color 0.3s;
+cursor: pointer;
+}
+
+/* 公告区域 */
+/* .Announcement {
+  float: left;
+  width: 30%;
+  flex-direction: column;
+  height: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(134, 35, 35, 0.1);
+  background-color: #fff;
+} */
+
