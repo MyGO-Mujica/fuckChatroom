@@ -1,6 +1,5 @@
 <script setup>
-//import { userLoginService } from '@/api/user'
-// import {  userLoginService } from '@/api/user'
+// import { userRegisterService, userLoginService } from '@/api/user'
 import { User } from '@element-plus/icons-vue'
 import { ref } from 'vue'
 import { useUserStore } from '@/stores'
@@ -98,6 +97,34 @@ const login = async () => {
     ElMessage.error('登录失败，请检查输入')
   }
 }
+// 注册功能
+// const register = async () => {
+//   try {
+//     await form.value.validate()
+//     const res = await userRegisterService(formModel.value)
+//     // 保存用户数据到 pinia
+//     userStore.setUser(res.data)
+//     ElMessage.success('注册成功，自动登录中')
+//     router.push('/chat/chatRoom')
+//   } catch (error) {
+//     console.error('注册失败:', error)
+//     ElMessage.error(error.message || '注册失败')
+//   }
+// }
+
+// // 登录功能
+// const login = async () => {
+//   try {
+//     await form.value.validate()
+//     const res = await userLoginService(formModel.value)
+//     userStore.setUser(res.data)
+//     ElMessage.success('登录成功')
+//     router.push('/chat/chatRoom')
+//   } catch (error) {
+//     console.error('登录失败:', error)
+//     ElMessage.error(error.message || '登录失败')
+//   }
+// }
 </script>
 
 <template>
