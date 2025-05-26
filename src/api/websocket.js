@@ -1,0 +1,117 @@
+import { ElMessage } from 'element-plus'
+
+let ws = null
+let reconnectTimer = null
+const messageCallbacks = new Map()
+let currentUrl = ''
+
+/**
+ * 建立 WebSocket 连接（可多次调用自动防重连）
+ * @param {ws://ip:port/chat} url - ws 地址，比如
+ */
+export const connectWebSocket = (url) => {
+  if (ws && ws.readyState === WebSocket.OPEN) {
+    console.log('WebSocket 已连接，无需重复连接')
+    return
+  }
+
+  if (ws) {
+    // 如果之前有连接，先关闭
+    ws.close()
+  }
+
+  currentUrl = url
+  ws = new WebSocket(url)
+
+  ws.onopen = () => {
+    console.log('WebSocket 连接成功')
+    ElMessage.success('聊天连接已建立')
+    if (reconnectTimer) {
+      clearTimeout(reconnectTimer)
+      reconnectTimer = null
+    }
+  }
+
+  ws.onmessage = (event) => {
+    try {
+      const data = JSON.parse(event.data)
+      // 这里固定 key 'chat'，也可以根据 data.type 进行区分
+      const callback = messageCallbacks.get('chat')
+      if (callback) {
+        callback(null, data)
+      }
+    } catch (error) {
+      console.error('消息解析失败:', error)
+      ElMessage.error('消息格式错误')
+    }
+  }
+
+  ws.onerror = (error) => {
+    console.error('WebSocket 错误:', error)
+    ElMessage.error('聊天连接异常')
+  }
+
+  ws.onclose = () => {
+    console.log('WebSocket 连接关闭')
+    ElMessage.warning('聊天连接已断开')
+    ws = null
+    tryReconnect()
+  }
+}
+
+/**
+ * 发送聊天消息
+ * @param {string} username
+ * @param {string} content
+ * @returns {Promise}
+ */
+export const sendChatMessage = (username, content) => {
+  return new Promise((resolve, reject) => {
+    if (!ws || ws.readyState !== WebSocket.OPEN) {
+      ElMessage.error('聊天连接未建立')
+      return reject(new Error('聊天连接未建立'))
+    }
+    ws.send(JSON.stringify({ username, content }))
+    resolve()
+  })
+}
+
+/**
+ * 注册聊天消息回调
+ * @param {function} callback - 接收参数 (error, data)
+ */
+export const onChatMessage = (callback) => {
+  messageCallbacks.set('chat', callback)
+}
+
+/**
+ * 主动关闭 WebSocket 连接
+ */
+export const closeWebSocket = () => {
+  if (ws) {
+    ws.close()
+    ws = null
+  }
+}
+
+/**
+ * 判断 WebSocket 是否处于打开状态
+ * @returns {boolean}
+ */
+export const isWebSocketOpen = () => {
+  return ws?.readyState === WebSocket.OPEN曼波
+}
+
+/**
+ * 断线重连机制，间隔3秒重连一次
+ */
+const tryReconnect = () => {
+  if (reconnectTimer) return
+  reconnectTimer = setTimeout(() => {
+    reconnectTimer = null
+    if (!ws || ws.readyState === WebSocket.CLOSED) {
+      console.log('尝试重新连接 WebSocket...')
+      connectWebSocket(currentUrl)
+    }
+  }, 3000)
+}
