@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 // 注册接口
 export const userRegisterService = ({ username, password, avatar }) =>
-  request.post('/reg', { username, password, avatar })
+  request.post('/register', { username, password, avatar })
 //登录接口
 export const userLoginService = ({ username, password }) =>
   request.post('/login', { username, password })
