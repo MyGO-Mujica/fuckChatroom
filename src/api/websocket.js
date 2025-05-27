@@ -1,13 +1,23 @@
-import { ElMessage } from 'element-plus'
-
 let ws = null
 let reconnectTimer = null
 const messageCallbacks = new Map()
 let currentUrl = ''
 
+// 获取 JSESSIONID Cookie
+const getJsessionId = () => {
+  const cookies = document.cookie.split('; ')
+  for (const cookie of cookies) {
+    const [name, value] = cookie.split('=')
+    if (name === 'JSESSIONID') {
+      return value
+    }
+  }
+  return null
+}
+
 /**
  * 建立 WebSocket 连接（可多次调用自动防重连）
- * @param {ws://ip:port/chat} url - ws 地址，比如
+ * @param {ws://172.16.0.213:8080/chat} url - ws 地址
  */
 export const connectWebSocket = (url) => {
   if (ws && ws.readyState === WebSocket.OPEN) {
@@ -26,12 +36,18 @@ export const connectWebSocket = (url) => {
   ws.onopen = () => {
     console.log('WebSocket 连接成功')
     ElMessage.success('聊天连接已建立')
+    // 发送 JSESSIONID 作为认证
+    const jsessionId = getJsessionId()
+    if (jsessionId) {
+      ws.send(JSON.stringify({ type: 'auth', jsessionId }))
+    } else {
+      console.warn('未找到 JSESSIONID，认证可能失败')
+    }
     if (reconnectTimer) {
       clearTimeout(reconnectTimer)
       reconnectTimer = null
     }
   }
-
   ws.onmessage = (event) => {
     try {
       const data = JSON.parse(event.data)
@@ -99,7 +115,7 @@ export const closeWebSocket = () => {
  * @returns {boolean}
  */
 export const isWebSocketOpen = () => {
-  return ws?.readyState === WebSocket.OPEN曼波
+  return ws?.readyState === WebSocket.OPEN
 }
 
 /**
