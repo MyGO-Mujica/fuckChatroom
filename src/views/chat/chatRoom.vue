@@ -1,13 +1,13 @@
 <script setup>
-import { ref, /*onMounted, onBeforeUnmount,*/ nextTick } from 'vue'
-// import { connectWebSocket, closeWebSocket, sendChatMessage, onChatMessage } from '@/api/websocket'
-//import { getHistoryMessage } from '@/api/user'
+import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue'
+import { connectWebSocket, closeWebSocket, sendChatMessage, onChatMessage } from '@/api/websocket'
+import { getHistoryMessage } from '@/api/user'
 import 'emoji-picker-element'
 import { useUserStore } from '@/stores'
 import './chatRoom.css'
 
 const userStore = useUserStore()
-// const wsUrl = 'ws://[ip]:[port]/chat'
+const wsUrl = 'ws://172.16.0.213:8080/chat'
 // 数据
 const message = ref('')
 const messages = ref([])
@@ -15,84 +15,84 @@ const showEmoji = ref(false)
 const messagesContainer = ref(null)
 
 // sendMessage 函数定义
-function sendMessage() {
-  if (message.value.trim() === '') return
-  const newMessage = {
-    username: userStore.user.username,
-    text: message.value,
-    time: formatTime(new Date()),
-    type: 'sent',
-  }
-  messages.value.push(newMessage)
-  message.value = ''
-  scrollToBottom()
-  setTimeout(() => {
-    const replyMessage = {
-      text: `我收到了你的消息: ${newMessage.text}`,
-      time: formatTime(new Date()),
-      type: 'received',
-    }
-    // 测试
-    // sendChatMessage(userStore.user.username, message.value)
-    messages.value.push(replyMessage)
-    scrollToBottom()
-  }, 1000)
-}
-// // 发送消息
-// async function sendMessage() {
+// function sendMessage() {
 //   if (message.value.trim() === '') return
-
 //   const newMessage = {
 //     username: userStore.user.username,
 //     text: message.value,
 //     time: formatTime(new Date()),
 //     type: 'sent',
 //   }
-//   // 先本地加入消息列表
 //   messages.value.push(newMessage)
-
-//   try {
-//     // 发送给服务器
-//     await sendChatMessage(userStore.user.username, message.value)
-//   } catch (error) {
-//     // 如果发送失败，可以提示或处理
-//     console.error('发送失败:', error)
-//   }
-
 //   message.value = ''
 //   scrollToBottom()
-// }
-
-// 初始化加载历史消息
-// async function loadHistory() {
-//   try {
-//     const res = await getHistoryMessage()
-//     if (Array.isArray(res.data)) {
-//       const formattedMessages = res.data.map(msg => ({
-//         username: msg.username,
-//         text: msg.content,
-//         time: formatTime(new Date(msg.time || Date.now())),
-//         type: msg.username === userStore.user.username ? 'sent' : 'received',
-//       }))
-//       messages.value.push(...formattedMessages)
-//       scrollToBottom()
+//   setTimeout(() => {
+//     const replyMessage = {
+//       text: `我收到了你的消息: ${newMessage.text}`,
+//       time: formatTime(new Date()),
+//       type: 'received',
 //     }
-//   } catch (error) {
-//     console.error('获取历史消息失败:', error)
-//   }
+//     // 测试
+//     // sendChatMessage(userStore.user.username, message.value)
+//     messages.value.push(replyMessage)
+//     scrollToBottom()
+//   }, 1000)
 // }
-// // 监听新消息
-// onChatMessage((err, data) => {
-//   if (err) return
-//   const msg = {
-//     username: data.username,
-//     text: data.content,
-//     time: formatTime(new Date()),
-//     type: 'received',
-//   }
-//   messages.value.push(msg)
-//   scrollToBottom()
-// })
+// // 发送消息
+async function sendMessage() {
+  if (message.value.trim() === '') return
+
+  const newMessage = {
+    username: userStore.user.username,
+    text: message.value,
+    time: formatTime(new Date()),
+    type: 'sent',
+  }
+  // 先本地加入消息列表
+  messages.value.push(newMessage)
+
+  try {
+    // 发送给服务器
+    await sendChatMessage(userStore.user.username, message.value)
+  } catch (error) {
+    // 如果发送失败，可以提示或处理
+    console.error('发送失败:', error)
+  }
+
+  message.value = ''
+  scrollToBottom()
+}
+
+//初始化加载历史消息
+async function loadHistory() {
+  try {
+    const res = await getHistoryMessage()
+    if (Array.isArray(res.data)) {
+      const formattedMessages = res.data.map((msg) => ({
+        username: msg.username,
+        text: msg.content,
+        time: formatTime(new Date(msg.time || Date.now())),
+        type: msg.username === userStore.user.username ? 'sent' : 'received',
+      }))
+      messages.value.push(...formattedMessages)
+      scrollToBottom()
+    }
+  } catch (error) {
+    console.error('获取历史消息失败:', error)
+  }
+}
+// 监听新消息
+onChatMessage((err, data) => {
+  if (err) return
+  const msg = {
+    username: data.username,
+    text: data.content,
+    time: formatTime(new Date()),
+    type: 'received',
+  }
+  messages.value.push(msg)
+  scrollToBottom()
+})
 
 // 增添emoji
 function handleEmojiClick(event) {
@@ -116,16 +116,16 @@ function formatTime(date) {
   return `${hours}:${minutes}`
 }
 
-// 组件挂载时，连接 WebSocket 并注册消息回调
-// onMounted(() => {
-//   connectWebSocket(wsUrl)
-//    loadHistory()
-// })
+//组件挂载时，连接 WebSocket 并注册消息回调
+onMounted(() => {
+  connectWebSocket(wsUrl)
+  loadHistory()
+})
 
-// // 组件卸载时，关闭连接
-// onBeforeUnmount(() => {
-//   closeWebSocket()
-// })
+// 组件卸载时，关闭连接
+onBeforeUnmount(() => {
+  closeWebSocket()
+})
 // 初始化时滚动到底部并打印 avatar 路径
 nextTick(() => {
   scrollToBottom()
