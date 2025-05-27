@@ -1,27 +1,25 @@
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
 
-// 基础 URL
-const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:3000'
+const baseURL = 'http://172.16.0.213:8080'
 
 const instance = axios.create({
   baseURL,
   timeout: 10000,
 })
 
-// 请求拦截器（无需 token，直接返回 config）
 instance.interceptors.request.use(
   (config) => {
+    console.log('请求配置:', config) // 调试：打印请求配置
     return config
   },
-  (err) => Promise.reject(err)
+  (err) => Promise.reject(err),
 )
 
-// 响应拦截器
 instance.interceptors.response.use(
   (res) => {
     // 处理业务逻辑
-    if (res.data.code === '1') {
+    if (res.data.code === 1 ) {
       return res.data // 返回核心数据
     }
     // 处理业务失败
@@ -29,12 +27,9 @@ instance.interceptors.response.use(
     return Promise.reject(new Error(res.data.msg || '服务器异常'))
   },
   (err) => {
-    // 默认错误处理
     ElMessage.error(err.response?.data?.msg || '服务器异常')
     return Promise.reject(err)
-  }
+  },
 )
 
-
 export default instance
-
