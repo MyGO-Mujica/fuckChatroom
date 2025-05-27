@@ -1,7 +1,7 @@
 <script setup>
-// import { userRegisterService, userLoginService } from '@/api/user'
+import { userRegisterService, userLoginService } from '@/api/user'
 import { User } from '@element-plus/icons-vue'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useUserStore } from '@/stores'
 import { useRouter } from 'vue-router'
 const isRegister = ref(false)
@@ -55,76 +55,75 @@ const formModel = ref({
   password: '',
   avatar: images.value[0],
 })
-console.log(formModel)
 // 模拟 userLoginService 的响应
-const mockUserLoginService = async (data) => {
-  // 模拟后端返回的数据
-  return {
-    data: {
-      username: data.username,
-      password: data.password,
-      avatar: data.avatar,
-    },
-  }
-}
-const register = async () => {
-  try {
-    await form.value.validate()
-    // 打印普通对象，避免 Proxy
-    console.log('表单数据:', JSON.parse(JSON.stringify(formModel.value)))
-    const res = await mockUserLoginService(formModel.value)
-    console.log('模拟登录响应数据:', JSON.parse(JSON.stringify(res.data)))
-    userStore.setUser(res.data)
-    ElMessage.success('模拟登录成功')
-  } catch (error) {
-    console.error('登录错误:', error)
-    ElMessage.error('登录失败，请检查输入')
-  }
-}
-
-const login = async () => {
-  try {
-    await form.value.validate()
-    // 打印普通对象，避免 Proxy
-    console.log('表单数据:', JSON.parse(JSON.stringify(formModel.value)))
-    const res = await mockUserLoginService(formModel.value)
-    console.log('模拟登录响应数据:', JSON.parse(JSON.stringify(res.data)))
-    userStore.setUser(res.data)
-    ElMessage.success('模拟登录成功')
-    router.push('/chat/chatRoom')
-  } catch (error) {
-    console.error('登录错误:', error)
-    ElMessage.error('登录失败，请检查输入')
-  }
-}
-// 注册功能
+// const mockUserLoginService = async (data) => {
+//   // 模拟后端返回的数据
+//   return {
+//     data: {
+//       username: data.username,
+//       password: data.password,
+//       avatar: data.avatar,
+//     },
+//   }
+// }
 // const register = async () => {
 //   try {
 //     await form.value.validate()
-//     const res = await userRegisterService(formModel.value)
-//     // 保存用户数据到 pinia
+//     // 打印普通对象，避免 Proxy
+//     console.log('表单数据:', JSON.parse(JSON.stringify(formModel.value)))
+//     const res = await mockUserLoginService(formModel.value)
+//     console.log('模拟登录响应数据:', JSON.parse(JSON.stringify(res.data)))
 //     userStore.setUser(res.data)
-//     ElMessage.success('注册成功，自动登录中')
-//     router.push('/chat/chatRoom')
+//     ElMessage.success('模拟登录成功')
 //   } catch (error) {
-//     console.error('注册失败:', error)
-//     ElMessage.error(error.message || '注册失败')
+//     console.error('登录错误:', error)
+//     ElMessage.error('登录失败，请检查输入')
 //   }
 // }
 
-// // 登录功能
 // const login = async () => {
 //   try {
 //     await form.value.validate()
-//     const res = await userLoginService(formModel.value)
+//     // 打印普通对象，避免 Proxy
+//     console.log('表单数据:', JSON.parse(JSON.stringify(formModel.value)))
+//     const res = await mockUserLoginService(formModel.value)
+//     console.log('模拟登录响应数据:', JSON.parse(JSON.stringify(res.data)))
 //     userStore.setUser(res.data)
-//     ElMessage.success('登录成功')
+//     ElMessage.success('模拟登录成功')
 //     router.push('/chat/chatRoom')
 //   } catch (error) {
-//     console.error('登录失败:', error)
-//     ElMessage.error(error.message || '登录失败')
+//     console.error('登录错误:', error)
+//     ElMessage.error('登录失败，请检查输入')
 //   }
 // }
+//注册功能
+const register = async () => {
+  await form.value.validate()
+  await userRegisterService(formModel.value)
+  ElMessage.success('注册成功')
+  isRegister.value = false
+}
+
+// 登录功能
+const login = async () => {
+  await form.value.validate()
+  const res = await userLoginService(formModel.value)
+  // 保存用户数据到 pinia
+  console.log(res.data)
+
+  userStore.setUser(res.data)
+  ElMessage.success('登录成功')
+  router.push('/chat/chatRoom')
+}
+
+// 切换的时候，重置表单内容
+watch(isRegister, () => {
+  formModel.value = {
+    username: '',
+    password: '',
+    avatar: images.value[0],
+  }
+})
 </script>
 
 <template>
