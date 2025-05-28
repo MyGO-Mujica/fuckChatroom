@@ -6,7 +6,6 @@ import { useUserStore } from '@/stores'
 import { useRouter } from 'vue-router'
 const isRegister = ref(false)
 const form = ref()
-
 // 整个表单的校验规则
 // 1. 非空校验 required:true, message提示消息， trigger触发校验的时机 blur change
 // 2. 长度校验 min：xx， max：xx
@@ -109,10 +108,25 @@ const login = async () => {
   await form.value.validate()
   const res = await userLoginService(formModel.value)
   // 保存用户数据到 pinia
-  console.log(res.data)
-
+  console.log('登录', res.data)
+  console.log('token', res.msg)
   userStore.setUser(res.data)
+  userStore.setToken(res.msg)
   ElMessage.success('登录成功')
+  // 2. 登录成功后再连接 WebSocket
+  const socket = new WebSocket('ws://172.16.0.210:8080/chat')
+
+  socket.onopen = () => {
+    console.log('WebSocket 连接成功')
+  }
+
+  socket.onmessage = (event) => {
+    console.log('收到消息:', event.data)
+  }
+
+  socket.onerror = (err) => {
+    console.error('WebSocket 错误:', err)
+  }
   router.push('/chat/chatRoom')
 }
 
