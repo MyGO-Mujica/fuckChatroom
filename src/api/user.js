@@ -11,4 +11,4 @@ export const userLoginService = ({ username, password }) =>
 export const userGetInfoService = () => request.get('/my/userinfo')
 
 //获取历史消息
-export const getHistoryMessage= ()=>request.get('/message')
+export const getHistoryMessage = () => request.get('/message')
