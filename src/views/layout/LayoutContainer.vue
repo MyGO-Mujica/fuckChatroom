@@ -20,7 +20,8 @@ const handleCommand = async (key) => {
       confirmButtonClass: 'el-button--danger', // 确认按钮使用危险样式
     })
 
-    // 清除本地的数据 （user信息）
+     // 清除本地的数据 (token + user信息)
+    userStore.removeToken()
     userStore.setUser({})
     router.push('/login')
   }
