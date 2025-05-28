@@ -1,25 +1,26 @@
+import { useUserStore } from '@/stores'
 let ws = null
 let reconnectTimer = null
 const messageCallbacks = new Map()
 let currentUrl = ''
 
-// 获取 JSESSIONID Cookie
-const getJsessionId = () => {
-  const cookies = document.cookie.split('; ')
-  for (const cookie of cookies) {
-    const [name, value] = cookie.split('=')
-    if (name === 'JSESSIONID') {
-      return value
-    }
-  }
-  return null
-}
-
 /**
  * 建立 WebSocket 连接（可多次调用自动防重连）
- * @param {ws://172.16.0.213:8080/chat} url - ws 地址
+ * @param {ws://172.16.0.211:8080/chat} url - ws 地址
  */
 export const connectWebSocket = (url) => {
+  const userStore = useUserStore()
+  const token = userStore.token
+
+  if (!token) {
+    console.warn('连接 WebSocket 失败：缺少 token')
+    ElMessage.warning('连接失败：请先登录')
+    return
+  }
+
+  const fullUrl = `${url}/${encodeURIComponent(token)}`
+  currentUrl = url // 用于重连时保留原始地址
+
   if (ws && ws.readyState === WebSocket.OPEN) {
     console.log('WebSocket 已连接，无需重复连接')
     return
@@ -30,31 +31,22 @@ export const connectWebSocket = (url) => {
     ws.close()
   }
 
-  currentUrl = url
-  ws = new WebSocket(url)
+  ws = new WebSocket(fullUrl)
 
   ws.onopen = () => {
-    console.log('WebSocket 连接成功')
     ElMessage.success('聊天连接已建立')
-    // 发送 JSESSIONID 作为认证
-    const jsessionId = getJsessionId()
-    if (jsessionId) {
-      ws.send(JSON.stringify({ type: 'auth', jsessionId }))
-    } else {
-      console.warn('未找到 JSESSIONID，认证可能失败')
-    }
-    if (reconnectTimer) {
-      clearTimeout(reconnectTimer)
-      reconnectTimer = null
-    }
   }
+
   ws.onmessage = (event) => {
     try {
       const data = JSON.parse(event.data)
-      // 这里固定 key 'chat'，也可以根据 data.type 进行区分
-      const callback = messageCallbacks.get('chat')
-      if (callback) {
-        callback(null, data)
+      if (data.systemMsg) {
+        ElMessage.success(data.content)
+      } else {
+        const callback = messageCallbacks.get('chat')
+        if (callback) {
+          callback(null, data)
+        }
       }
     } catch (error) {
       console.error('消息解析失败:', error)
