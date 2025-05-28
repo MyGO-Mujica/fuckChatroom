@@ -7,38 +7,14 @@ import { useUserStore } from '@/stores'
 import './chatRoom.css'
 
 const userStore = useUserStore()
-const wsUrl = 'ws://172.16.0.213:8080/chat'
+const wsUrl = 'ws://172.16.0.211:8080/chat'
 // 数据
 const message = ref('')
 const messages = ref([])
 const showEmoji = ref(false)
 const messagesContainer = ref(null)
 
-// sendMessage 函数定义
-// function sendMessage() {
-//   if (message.value.trim() === '') return
-//   const newMessage = {
-//     username: userStore.user.username,
-//     text: message.value,
-//     time: formatTime(new Date()),
-//     type: 'sent',
-//   }
-//   messages.value.push(newMessage)
-//   message.value = ''
-//   scrollToBottom()
-//   setTimeout(() => {
-//     const replyMessage = {
-//       text: `我收到了你的消息: ${newMessage.text}`,
-//       time: formatTime(new Date()),
-//       type: 'received',
-//     }
-//     // 测试
-//     // sendChatMessage(userStore.user.username, message.value)
-//     messages.value.push(replyMessage)
-//     scrollToBottom()
-//   }, 1000)
-// }
-// // 发送消息
+ // 发送消息
 async function sendMessage() {
   if (message.value.trim() === '') return
 
@@ -81,7 +57,7 @@ async function loadHistory() {
     console.error('获取历史消息失败:', error)
   }
 }
-// 监听新消息
+//监听新消息
 onChatMessage((err, data) => {
   if (err) return
   const msg = {
