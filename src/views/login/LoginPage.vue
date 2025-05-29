@@ -69,47 +69,7 @@ const formModel = ref({
   password: '',
   avatar: images.value[0],
 })
-// 模拟 userLoginService 的响应
-// const mockUserLoginService = async (data) => {
-//   // 模拟后端返回的数据
-//   return {
-//     data: {
-//       username: data.username,
-//       password: data.password,
-//       avatar: data.avatar,
-//     },
-//   }
-// }
-// const register = async () => {
-//   try {
-//     await form.value.validate()
-//     // 打印普通对象，避免 Proxy
-//     console.log('表单数据:', JSON.parse(JSON.stringify(formModel.value)))
-//     const res = await mockUserLoginService(formModel.value)
-//     console.log('模拟登录响应数据:', JSON.parse(JSON.stringify(res.data)))
-//     userStore.setUser(res.data)
-//     ElMessage.success('模拟登录成功')
-//   } catch (error) {
-//     console.error('登录错误:', error)
-//     ElMessage.error('登录失败，请检查输入')
-//   }
-// }
 
-// const login = async () => {
-//   try {
-//     await form.value.validate()
-//     // 打印普通对象，避免 Proxy
-//     console.log('表单数据:', JSON.parse(JSON.stringify(formModel.value)))
-//     const res = await mockUserLoginService(formModel.value)
-//     console.log('模拟登录响应数据:', JSON.parse(JSON.stringify(res.data)))
-//     userStore.setUser(res.data)
-//     ElMessage.success('模拟登录成功')
-//     router.push('/chat/chatRoom')
-//   } catch (error) {
-//     console.error('登录错误:', error)
-//     ElMessage.error('登录失败，请检查输入')
-//   }
-// }
 //注册功能
 const register = async () => {
   await form.value.validate()
@@ -123,25 +83,23 @@ const login = async () => {
   await form.value.validate()
   const res = await userLoginService(formModel.value)
   // 保存用户数据到 pinia
-  console.log('登录', res.data)
-  console.log('token', res.msg)
   userStore.setUser(res.data)
   userStore.setToken(res.msg)
   ElMessage.success('登录成功')
   // 2. 登录成功后再连接 WebSocket
-  const socket = new WebSocket('ws://172.16.0.210:8080/chat')
+  // const socket = new WebSocket('ws://172.16.0.210:8080/chat')
 
-  socket.onopen = () => {
-    console.log('WebSocket 连接成功')
-  }
+  // socket.onopen = () => {
+  //   console.log('WebSocket 连接成功')
+  // }
 
-  socket.onmessage = (event) => {
-    console.log('收到消息:', event.data)
-  }
+  // socket.onmessage = (event) => {
+  //   console.log('收到消息:', event.data)
+  // }
 
-  socket.onerror = (err) => {
-    console.error('WebSocket 错误:', err)
-  }
+  // socket.onerror = (err) => {
+  //   console.error('WebSocket 错误:', err)
+  // }
   router.push('/chat/chatRoom')
 }
 
@@ -275,6 +233,7 @@ watch(isRegister, () => {
             v-model="formModel.username"
             :prefix-icon="User"
             placeholder="请输入用户名"
+            autocomplete="off"
           ></el-input>
         </el-form-item>
         <el-form-item prop="password">
@@ -373,7 +332,6 @@ watch(isRegister, () => {
   }
   .selected-avatar:hover {
     border: 2px solid#409eff;
-
   }
   .change-tip {
     color: #87bddd;
