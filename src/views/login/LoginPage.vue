@@ -48,15 +48,15 @@ const images = ref([
   'https://i.pinimg.com/736x/e6/d5/3e/e6d53ebb7ec8e61fe5bdea1cd7e43fe2.jpg',
   'https://i.pinimg.com/736x/3e/1c/68/3e1c689379e5094f854d4d21ca82c73e.jpg',
   'https://i.pinimg.com/736x/eb/f8/f2/ebf8f2cbc130784521559cda98eac7ff.jpg',
-  'https://i.pinimg.com/736x/56/dd/b6/56ddb6f65816606525202d0fbd6397a6.jpg',
+  'https://i.pinimg.com/736x/74/be/56/74be56cad2a14dcda871130f9a72e19c.jpg',
   'https://i.pinimg.com/736x/d0/8f/9e/d08f9e3f6409863ab2b279ba7f2d7a32.jpg',
   'https://i.pinimg.com/736x/e8/47/c6/e847c6b610b157c3fdfb5d3fa1bdf237.jpg',
-  'https://i.pinimg.com/736x/5b/c1/59/5bc1590fb60790a4c2e8b0fba6f80dc7.jpg',
+  'https://i.pinimg.com/736x/de/1b/04/de1b046ba593432ba0e0328d69ce6cd4.jpg',
   'https://i.pinimg.com/736x/0c/34/81/0c34819bc634927c7d003361e25931fc.jpg',
   'https://i.pinimg.com/736x/1f/ce/9b/1fce9b699fd1dd4ba5e850d2e72aa8ba.jpg',
   'https://i.pinimg.com/736x/a1/6e/7a/a16e7acd602212509ac2d668501f466a.jpg',
   'https://i.pinimg.com/736x/f6/96/8b/f6968bd25c4d4fc650e81b82f059f62e.jpg',
-  'https://i.pinimg.com/736x/74/be/56/74be56cad2a14dcda871130f9a72e19c.jpg',
+  'https://i.pinimg.com/736x/17/fd/f7/17fdf710781a56da86966d6011582907.jpg',
   'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fitem%2F201908%2F29%2F20190829102057_qoahb.thumb.400_0.gif&refer=http%3A%2F%2Fc-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1751098451&t=25b0798417d378a509438ab190728086',
   'https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExejY4cjkzeTk5c3BoMmQzdGlhYWF6MzhqazY0cm96azdjMTMxMms4MiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/TyiIUwlNKYmZhM2Whk/giphy.gif',
   'https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExczR1aWp3M3o0Zjdwd2wydmR1dnltbGFqNmUzZWlyaXUyMmoxcGZ5cyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/UYzNgRSTf9X1e/giphy.gif',
@@ -369,9 +369,11 @@ watch(isRegister, () => {
     height: 100px;
     border-radius: 50%;
     border: 2px solid #87bddd;
+    background-color: rgb(225, 227, 230);
   }
   .selected-avatar:hover {
     border: 2px solid#409eff;
+
   }
   .change-tip {
     color: #87bddd;
