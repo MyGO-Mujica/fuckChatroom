@@ -32,7 +32,6 @@ async function sendMessage() {
   try {
     // 发送给服务器
     await sendChatMessage(userStore.user.username, message.value, userStore.user.avatar)
-    console.log(userStore.user.username, message.value, userStore.user.avatar)
   } catch (error) {
     // 如果发送失败，可以提示或处理
     console.error('发送失败:', error)
@@ -54,8 +53,6 @@ async function loadHistory() {
         time: formatTime(new Date(msg.time || Date.now())),
         type: msg.username === userStore.user.username ? 'sent' : 'received',
       }))
-      console.log(res.data)
-
       messages.value.push(...formattedMessages)
       scrollToBottom()
     }
@@ -73,10 +70,7 @@ onChatMessage((err, data) => {
     time: formatTime(new Date()),
     type: 'received',
   }
-  console.log('头像', data.avatar)
-
   messages.value.push(msg)
-
   scrollToBottom()
 })
 
