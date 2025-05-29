@@ -26,7 +26,6 @@ export const connectWebSocket = (url) => {
   currentUrl = url // 用于重连时保留原始地址
 
   if (ws && ws.readyState === WebSocket.OPEN) {
-    console.log('WebSocket 已连接，无需重复连接')
     return
   }
 
@@ -65,7 +64,6 @@ export const connectWebSocket = (url) => {
   }
 
   ws.onclose = () => {
-    console.log('WebSocket 连接关闭')
     ElMessage.warning('聊天连接已断开')
     ws = null
 
