@@ -1,8 +1,12 @@
 import { useUserStore } from '@/stores'
+import router from '@/router'
 let ws = null
 let reconnectTimer = null
 const messageCallbacks = new Map()
 let currentUrl = ''
+let isManuallyClosed = false
+let reconnectAttempts = 0 // 当前已重连次数
+const maxReconnectAttempts = 3 // 最大重连次数
 
 /**
  * 建立 WebSocket 连接（可多次调用自动防重连）
@@ -35,6 +39,7 @@ export const connectWebSocket = (url) => {
 
   ws.onopen = () => {
     ElMessage.success('聊天连接已建立')
+    reconnectAttempts = 0 // 连接成功，重置重连次数
   }
 
   ws.onmessage = (event) => {
@@ -63,7 +68,13 @@ export const connectWebSocket = (url) => {
     console.log('WebSocket 连接关闭')
     ElMessage.warning('聊天连接已断开')
     ws = null
-    tryReconnect()
+
+    // 如果不是用户主动关闭，才重连
+    if (!isManuallyClosed) {
+      tryReconnect()
+    } else {
+      isManuallyClosed = false // 恢复默认状态，防止影响下一次连接
+    }
   }
 }
 
@@ -73,13 +84,13 @@ export const connectWebSocket = (url) => {
  * @param {string} content
  * @returns {Promise}
  */
-export const sendChatMessage = (username, content) => {
+export const sendChatMessage = (username, content, avatar) => {
   return new Promise((resolve, reject) => {
     if (!ws || ws.readyState !== WebSocket.OPEN) {
       ElMessage.error('聊天连接未建立')
       return reject(new Error('聊天连接未建立'))
     }
-    ws.send(JSON.stringify({ username, content }))
+    ws.send(JSON.stringify({ username, content, avatar }))
     resolve()
   })
 }
@@ -97,6 +108,7 @@ export const onChatMessage = (callback) => {
  */
 export const closeWebSocket = () => {
   if (ws) {
+    isManuallyClosed = true
     ws.close()
     ws = null
   }
@@ -115,10 +127,17 @@ export const isWebSocketOpen = () => {
  */
 const tryReconnect = () => {
   if (reconnectTimer) return
+  // 超过最大重连次数
+  if (reconnectAttempts >= maxReconnectAttempts) {
+    ElMessage.error('无法连接到服务器，请重新登录')
+    router.push('/login')
+  }
+
   reconnectTimer = setTimeout(() => {
     reconnectTimer = null
     if (!ws || ws.readyState === WebSocket.CLOSED) {
-      console.log('尝试重新连接 WebSocket...')
+      reconnectAttempts++
+      console.warn(`正在尝试第 ${reconnectAttempts} 次重连...`)
       connectWebSocket(currentUrl)
     }
   }, 3000)
