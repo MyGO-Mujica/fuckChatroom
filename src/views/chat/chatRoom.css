@@ -1,8 +1,5 @@
-
-
 .chat-messages {
-  background-color: #F8F5FC;
-
+  background-color: #f8f5fc;
 }
 .chat-container {
   display: flex;
@@ -17,7 +14,7 @@
 }
 
 .chat-header {
-  background-color: #D0B9E9;
+  background-color: #d0b9e9;
   display: flex;
   justify-content: space-between; /* 两端对齐，确保 chat-actions 在右侧 */
   align-items: center;
@@ -38,6 +35,7 @@
   border-radius: 50%;
   margin-right: 5px;
   object-fit: cover;
+  background-color: rgb(225, 227, 230);
 }
 .avatar-right {
   width: 50px;
@@ -45,6 +43,7 @@
   border-radius: 50%;
   margin-left: 5px;
   object-fit: cover;
+  background-color: rgb(225, 227, 230);
 }
 
 .user-name {
@@ -159,11 +158,12 @@
 }
 
 .message-bubble {
-  padding: 1px 10px;
+  padding: 1.5px 10px;
   border-radius: 18px;
   margin-bottom: 4px;
   position: relative;
-  font-size: 14px;
+  font-size: 15px;
+  font-weight: 600;
   line-height: 1.4;
   align-self: flex-start; /* 防止宽度拉伸 */
 }
@@ -174,15 +174,15 @@
 .received .message-bubble {
   background-color: #feebee;
   color: #333333;
-  border: 1px solid #FFC0CB;
+  border: 1px solid #ffc0cb;
   border-top-left-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
 }
 
 .sent .message-bubble {
-  background-color: #E3D8FF;
-  color: #5E4B9F;
-  border: 1px solid #D4C2FF;
+  background-color: #e3d8ff;
+  color: #5e4b9f;
+  border: 1px solid #d4c2ff;
   border-top-right-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
@@ -224,7 +224,7 @@
 }
 
 .input-wrapper input:focus {
-  border-color: #D0B9E9;
+  border-color: #d0b9e9;
 }
 
 .emoji-btn {
@@ -256,7 +256,7 @@
   border-radius: 8px;
 }
 .send-btn {
-  background-color: #D0B9E9;
+  background-color: #d0b9e9;
   color: #fff;
   border: none;
   padding: 0 16px;
@@ -291,22 +291,22 @@
 
 /* 滚动条整体样式 */
 ::-webkit-scrollbar {
-width: 10px; /* 纵向滚动条宽度 */
-height: 10px; /* 横向滚动条高度 */
+  width: 10px; /* 纵向滚动条宽度 */
+  height: 10px; /* 横向滚动条高度 */
 }
 
 /* 滚动条轨道 */
 ::-webkit-scrollbar-track {
-background: rgba(159, 115, 193, 0);
-border-radius: 2em;
+  background: rgba(159, 115, 193, 0);
+  border-radius: 2em;
 }
 
 /* 滚动条滑块 */
 ::-webkit-scrollbar-thumb {
-background-color: rgba(205, 171, 246, 0.5);
-border-radius: 2em;
-transition: background-color 0.3s;
-cursor: pointer;
+  background-color: rgba(205, 171, 246, 0.5);
+  border-radius: 2em;
+  transition: background-color 0.3s;
+  cursor: pointer;
 }
 
 /* 公告区域 */
@@ -320,4 +320,3 @@ cursor: pointer;
   box-shadow: 0 10px 25px rgba(134, 35, 35, 0.1);
   background-color: #fff;
 } */
-
