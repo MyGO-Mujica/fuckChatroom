@@ -262,20 +262,44 @@ watch(isRegister, () => {
 
 <style lang="scss" scoped>
 .login-page {
-  height: 100vh;
-  background: url('@/assets/loginBg.jpg') no-repeat 0%;
+  display: flex;
+  width: 100vw; /* 视口宽度 */
+  height: 100vh; /* 视口高度 */
+  position: relative;
+  overflow: hidden;
+  align-items: center; /* 垂直居中 */
+  background: url('@/assets/bg.png');
 
   .form {
     display: flex;
     flex-direction: column;
     justify-content: center;
     user-select: none;
+    padding: 25px 25px 0px 25px;
+    box-shadow: 0 2px 12px rgba(14, 14, 14, 0.1);
+    background-color: rgba(255, 255, 255, 0.4);
+    /* 渐变背景 + 玻璃效果 */
+    background: linear-gradient(
+      145deg,
+      rgba(234, 218, 243, 0.137),
+      rgba(176, 141, 231, 0.3),
+      rgba(144, 88, 234, 0.4)
+    );
+    backdrop-filter: blur(10px);
+
+    /* 圆角 */
+    border-radius: 16px;
 
     .title {
       margin: 0 auto;
     }
     .button {
       width: 100%;
+      background-color: #a18cd1;
+      border: #8c7ae6;
+    }
+    .button:hover {
+      background-color: #7a6dd0;
     }
     .flex {
       width: 100%;
@@ -310,11 +334,11 @@ watch(isRegister, () => {
 .chatroom-title::after {
   content: '';
   position: absolute;
-  bottom: -6px;
+  bottom: -10px;
   left: 0;
   width: 75%;
   height: 4px;
-  background: linear-gradient(to right, #409eff, #67c23a);
+  background: linear-gradient(to right, #84fab0, #8fd3f4);
   border-radius: 2px;
 }
 
