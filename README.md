@@ -20,8 +20,4 @@ pnpm dev
 pnpm build
 ```
 
-### 使用 ESLint 进行代码检查
 
-```sh
-pnpm lint
-```
