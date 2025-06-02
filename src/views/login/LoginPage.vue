@@ -141,6 +141,7 @@ watch(isRegister, () => {
         size="large"
         autocomplete="off"
         v-if="isRegister"
+        @submit.prevent="register"
       >
         <el-form-item>
           <div class="form-header">
@@ -186,9 +187,20 @@ watch(isRegister, () => {
           ></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button @click="register" class="button" type="primary" auto-insert-space>
-            注册
-          </el-button>
+          <button class="animated-button">
+            <svg viewBox="0 0 24 24" class="arr-2" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"
+              ></path>
+            </svg>
+            <span class="text">注册</span>
+            <span class="circle"></span>
+            <svg viewBox="0 0 24 24" class="arr-1" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"
+              ></path>
+            </svg>
+          </button>
         </el-form-item>
         <el-form-item class="flex">
           <el-link type="info" :underline="false" @click="isRegister = false"> ← 返回 </el-link>
@@ -247,9 +259,20 @@ watch(isRegister, () => {
         </el-form-item>
 
         <el-form-item>
-          <el-button class="button" type="primary" auto-insert-space native-type="submit"
-            >登录</el-button
-          >
+          <button class="animated-button">
+            <svg viewBox="0 0 24 24" class="arr-2" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"
+              ></path>
+            </svg>
+            <span class="text">登录</span>
+            <span class="circle"></span>
+            <svg viewBox="0 0 24 24" class="arr-1" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"
+              ></path>
+            </svg>
+          </button>
         </el-form-item>
         <el-form-item class="flex">
           <el-link type="info" :underline="false" @click="isRegister = true"> 注册 → </el-link>
@@ -263,12 +286,15 @@ watch(isRegister, () => {
 <style lang="scss" scoped>
 .login-page {
   display: flex;
-  width: 100vw; /* 视口宽度 */
-  height: 100vh; /* 视口高度 */
+  width: 100vw;
+  height: 100vh;
   position: relative;
   overflow: hidden;
-  align-items: center; /* 垂直居中 */
+  align-items: center;
   background: url('@/assets/bg.png');
+  background-size: 120%; /* 放大背景图 */
+  background-position: -250px center; /* 向左移动 50 像素 */
+  background-repeat: no-repeat; /* 防止平铺 */
 
   .form {
     display: flex;
@@ -293,14 +319,97 @@ watch(isRegister, () => {
     .title {
       margin: 0 auto;
     }
-    .button {
+
+    .animated-button {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 4px;
       width: 100%;
-      background-color: #a18cd1;
-      border: #8c7ae6;
+      padding: 5px 36px;
+      margin-top: 5px;
+      border: 4px solid;
+      border-color: transparent;
+      font-size: 16px;
+      background-color: inherit;
+      border-radius: 100px;
+      font-weight: 600;
+      color: rgb(184, 97, 228);
+      box-shadow: 0 0 0 2px rgb(223, 163, 229);
+      cursor: pointer;
+      overflow: hidden;
+      transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
     }
-    .button:hover {
-      background-color: #7a6dd0;
+
+    .animated-button svg {
+      position: absolute;
+      width: 24px;
+      fill: rgb(181, 90, 227);
+      z-index: 9;
+      transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
     }
+
+    .animated-button .arr-1 {
+      right: 16px;
+    }
+
+    .animated-button .arr-2 {
+      left: -25%;
+    }
+
+    .animated-button .circle {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 20px;
+      height: 20px;
+      background-color: rgba(173, 129, 239, 0.781);
+      border-radius: 50%;
+      opacity: 0;
+      transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .animated-button .text {
+      position: relative;
+      z-index: 1;
+      transform: translateX(-12px);
+      transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .animated-button:hover {
+      box-shadow: 0 0 0 12px transparent;
+      color: #212121;
+      border-radius: 12px;
+    }
+
+    .animated-button:hover .arr-1 {
+      right: -25%;
+    }
+
+    .animated-button:hover .arr-2 {
+      left: 16px;
+    }
+
+    .animated-button:hover .text {
+      transform: translateX(12px);
+    }
+
+    .animated-button:hover svg {
+      fill: #212121;
+    }
+
+    .animated-button:active {
+      scale: 0.95;
+      box-shadow: 0 0 0 4px rgb(219, 119, 201);
+    }
+
+    .animated-button:hover .circle {
+      width: 350px;
+      height: 300px;
+      opacity: 1;
+    }
+
     .flex {
       width: 100%;
       display: flex;
