@@ -38,9 +38,7 @@ const handleCommand = async (key) => {
   <el-container class="layout-container">
     <el-container>
       <el-header>
-        <div>
-          <strong>欢迎来到科协聊天室</strong>
-        </div>
+        <div></div>
         <el-dropdown placement="bottom-end" @command="handleCommand">
           <!-- 展示给用户，默认看到的 -->
           <span class="el-dropdown__box">
