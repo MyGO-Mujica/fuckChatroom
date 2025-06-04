@@ -335,7 +335,7 @@ watch(isRegister, () => {
       border-radius: 100px;
       font-weight: 600;
       color: rgb(184, 97, 228);
-      box-shadow: 0 0 0 2px rgb(223, 163, 229);
+      box-shadow: 0 0 0 2px rgb(173, 129, 239, 0.781);
       cursor: pointer;
       overflow: hidden;
       transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
@@ -364,7 +364,7 @@ watch(isRegister, () => {
       transform: translate(-50%, -50%);
       width: 20px;
       height: 20px;
-      background-color: rgba(173, 129, 239, 0.781);
+      background-color: rgb(144, 88, 234, 0.4);
       border-radius: 50%;
       opacity: 0;
       transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
@@ -433,7 +433,7 @@ watch(isRegister, () => {
   .chatroom-title {
     font-size: 34px;
     font-weight: 700;
-    color: #409eff;
+    color: rgb(158, 134, 224);
     margin: 0;
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -447,7 +447,7 @@ watch(isRegister, () => {
   left: 0;
   width: 75%;
   height: 4px;
-  background: linear-gradient(to right, #84fab0, #8fd3f4);
+  background: linear-gradient(to right, #eee5b0,  rgb(196, 113, 235));
   border-radius: 2px;
 }
 
