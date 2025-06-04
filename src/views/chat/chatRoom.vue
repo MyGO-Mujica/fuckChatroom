@@ -7,7 +7,7 @@ import 'emoji-picker-element'
 import './chatRoom.css'
 
 const userStore = useUserStore()
-const wsUrl = 'ws://172.16.0.211:8080/chat'
+const wsUrl = 'ws://172.16.0.214:8080/chat'
 
 // 数据
 const message = ref('')
@@ -54,6 +54,7 @@ async function loadHistory() {
         type: msg.username === userStore.user.username ? 'sent' : 'received',
       }))
       messages.value.push(...formattedMessages)
+
       scrollToBottom()
     }
   } catch (error) {
@@ -64,13 +65,14 @@ async function loadHistory() {
 onChatMessage((err, data) => {
   if (err) return
   const msg = {
-    username: data.username,
+    username: data.userName,
     content: data.content,
     avatar: data.avatar,
     time: formatTime(new Date()),
     type: 'received',
   }
   messages.value.push(msg)
+
   scrollToBottom()
 })
 
