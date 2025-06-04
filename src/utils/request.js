@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
 import { useUserStore } from '@/stores'
-const baseURL = 'http://172.16.0.211:8080'
+const baseURL = 'http://172.16.0.214:8080'
 
 const instance = axios.create({
   baseURL,
