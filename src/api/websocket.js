@@ -10,7 +10,7 @@ const maxReconnectAttempts = 3 // 最大重连次数
 
 /**
  * 建立 WebSocket 连接（可多次调用自动防重连）
- * @param {ws://172.16.0.211:8080/chat} url - ws 地址
+ * @param {ws://172.16.0.214:8080/chat} url - ws 地址
  */
 export const connectWebSocket = (url) => {
   const userStore = useUserStore()
