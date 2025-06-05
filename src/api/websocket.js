@@ -45,7 +45,7 @@ export const connectWebSocket = (url) => {
     try {
       const data = JSON.parse(event.data)
       if (data.systemMsg) {
-        ElMessage.success(data.content)
+        ElMessage(data.content)
       } else {
         const callback = messageCallbacks.get('chat')
         if (callback) {
