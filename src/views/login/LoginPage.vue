@@ -121,15 +121,8 @@ watch(isRegister, () => {
 -->
   <el-row class="login-page">
     <el-col :span="6" :offset="3" class="form">
-      <el-form
-        :model="formModel"
-        :rules="rules"
-        ref="form"
-        size="large"
-        autocomplete="off"
-        v-if="isRegister"
-        @submit.prevent="register"
-      >
+      <el-form :model="formModel" :rules="rules" ref="form" size="large" autocomplete="off" v-if="isRegister"
+        @submit.prevent="register">
         <el-form-item>
           <div class="form-header">
             <div class="chatroom-title-wrapper">
@@ -143,49 +136,34 @@ watch(isRegister, () => {
         </el-form-item>
         <el-dialog v-model="showAvatarDialog" title="选择头像" width="400px" center>
           <div class="avatar-list">
-            <img
-              v-for="(img, index) in images"
-              :key="index"
-              :src="img"
-              class="avatar"
-              @click="
-                () => {
-                  formModel.avatar = img
-                  showAvatarDialog = false
-                }
-              "
-            />
+            <img v-for="(img, index) in images" :key="index" :src="img" class="avatar" @click="
+              () => {
+                formModel.avatar = img
+                showAvatarDialog = false
+              }
+            " />
           </div>
         </el-dialog>
 
         <el-form-item prop="username">
-          <el-input
-            v-model="formModel.username"
-            :prefix-icon="User"
-            placeholder="请输入用户名"
-          ></el-input>
+          <el-input v-model="formModel.username" :prefix-icon="User" placeholder="请输入用户名"></el-input>
         </el-form-item>
         <el-form-item prop="password">
-          <el-input
-            v-model="formModel.password"
-            :prefix-icon="Lock"
-            type="password"
-            placeholder="请输入密码"
-          ></el-input>
+          <el-input v-model="formModel.password" :prefix-icon="Lock" type="password" placeholder="请输入密码"></el-input>
         </el-form-item>
         <el-form-item>
           <button class="animated-button">
             <svg viewBox="0 0 24 24" class="arr-2" xmlns="http://www.w3.org/2000/svg">
               <path
-                d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"
-              ></path>
+                d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z">
+              </path>
             </svg>
             <span class="text">注册</span>
             <span class="circle"></span>
             <svg viewBox="0 0 24 24" class="arr-1" xmlns="http://www.w3.org/2000/svg">
               <path
-                d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"
-              ></path>
+                d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z">
+              </path>
             </svg>
           </button>
         </el-form-item>
@@ -194,76 +172,59 @@ watch(isRegister, () => {
         </el-form-item>
       </el-form>
       <!-- 登录相关表单 -->
-      <el-form
-        :model="formModel"
-        :rules="rules"
-        ref="form"
-        size="large"
-        autocomplete="off"
-        @submit.prevent="login"
-        v-else
-      >
+      <el-form :model="formModel" :rules="rules" ref="form" size="large" autocomplete="off" @submit.prevent="login"
+        v-else>
         <el-form-item>
           <div class="form-header">
             <div class="chatroom-title-wrapper">
               <h1 class="chatroom-title">KeXie ChatRoom</h1>
             </div>
+            <!-- 加一个空的头像占位元素，但不显示 -->
+            <div class="avatar-wrapper" style="visibility: hidden;">
+              <img :src="formModel.avatar" class="selected-avatar" />
+              <span class="change-tip">点击更换头像</span>
+            </div>
           </div>
         </el-form-item>
         <el-dialog v-model="showAvatarDialog" title="选择头像" width="400px" center>
           <div class="avatar-list">
-            <img
-              v-for="(img, index) in images"
-              :key="index"
-              :src="img"
-              class="avatar"
-              @click="
-                () => {
-                  formModel.avatar = img
-                  showAvatarDialog = false
-                }
-              "
-            />
+            <img v-for="(img, index) in images" :key="index" :src="img" class="avatar" @click="
+              () => {
+                formModel.avatar = img
+                showAvatarDialog = false
+              }
+            " />
           </div>
         </el-dialog>
 
         <el-form-item prop="username">
-          <el-input
-            v-model="formModel.username"
-            :prefix-icon="User"
-            placeholder="请输入用户名"
-            autocomplete="off"
-          ></el-input>
+          <el-input v-model="formModel.username" :prefix-icon="User" placeholder="请输入用户名" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item prop="password">
-          <el-input
-            v-model="formModel.password"
-            name="password"
-            :prefix-icon="Lock"
-            type="password"
-            placeholder="请输入密码"
-          ></el-input>
+          <el-input v-model="formModel.password" name="password" :prefix-icon="Lock" type="password"
+            placeholder="请输入密码"></el-input>
         </el-form-item>
 
         <el-form-item>
           <button class="animated-button">
             <svg viewBox="0 0 24 24" class="arr-2" xmlns="http://www.w3.org/2000/svg">
               <path
-                d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"
-              ></path>
+                d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z">
+              </path>
             </svg>
             <span class="text">登录</span>
             <span class="circle"></span>
             <svg viewBox="0 0 24 24" class="arr-1" xmlns="http://www.w3.org/2000/svg">
               <path
-                d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"
-              ></path>
+                d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z">
+              </path>
             </svg>
           </button>
         </el-form-item>
         <el-form-item class="flex">
           <el-link type="info" :underline="false" @click="isRegister = true"> 注册 → </el-link>
         </el-form-item>
+
       </el-form>
     </el-col>
     <el-col :span="12"></el-col>
