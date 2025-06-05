@@ -54,7 +54,6 @@ async function loadHistory() {
         type: msg.username === userStore.user.username ? 'sent' : 'received',
       }))
       messages.value.push(...formattedMessages)
-
       scrollToBottom()
     }
   } catch (error) {
