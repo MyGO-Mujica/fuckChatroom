@@ -23,6 +23,7 @@ async function sendMessage() {
     username: userStore.user.username,
     content: message.value,
     avatar: userStore.user.avatar,
+    time: formatTime(new Date()),
     type: 'sent',
   }
 
